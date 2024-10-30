@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简约计时展示页面</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <audio autoplay loop>
+        <source src="your-music-file.mp3" type="audio/mp3">
+        您的浏览器不支持音频播放。
+    </audio>
+
+    <div id="timer">0:00:00</div>
+    <div id="photos">
+        <div class="photo">照片1</div>
+        <div class="photo">照片2</div>
+    </div>
+
+    <div id="envelope">
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>❤️</title>
+            <style>
+              /* 基础样式 */
+              body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                overflow: hidden;
+              }
+          
+              .envelope-container {
+                position: relative;
+                width: 300px;
+                height: 200px;
+                perspective: 1000px;
+              }
+          
+              /* 信封主体 */
+              .envelope {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background: #e0c4a8;
+                border: 2px solid #b59e87;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                cursor: pointer;
+                transition: transform 0.5s;
+              }
+          
+              /* 信件样式 */
+      .letter {
+        position: absolute;
+        top: 120%;
+        left: 50%;
+        width: 350px;
+        height: 700px; /* 固定信件高度 */
+        padding: 20px;
+        background: linear-gradient(to bottom, #faf0e6, #f5e7da); /* 模拟淡米色的信纸背景 */
+        border: 1px solid #d3b99c;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translate(-50%, -60%) scale(0);
+        opacity: 0;
+        transition: all 1s ease-in-out;
+        overflow-y: auto; /* 开启纵向滚动 */
+        z-index: 1;
+        font-family: 'Georgia', serif;
+        color: #5b4636;
+      }
+          
+          /* 信件文字内容 */
+          .letter-content {
+            font-size: 1em;
+            line-height: 1.6; /* 更舒适的行间距 */
+            color: #5b4636; /* 字体颜色 */
+            text-align: left; /* 左对齐以贴合信件风格 */
+          }
+          
+          /* 插入的图片样式 */
+          .letter-content img {
+            max-width: 100%;
+            border-radius: 3px;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 给图片添加轻微的阴影 */
+          }
+          
+              /* 信封的三角形盖子 */
+              .flap {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-top: 100px solid #b07b56;
+                transform: translateX(-50%);
+                transform-origin: top;
+                transition: transform 1s;
+                z-index: 2; /* 盖子在前 */
+              }
+          
+              /* 阴影效果 */
+              .flap-shadow {
+                position: absolute;
+                top: 2px; /* 将阴影与盖子的顶部对齐 */
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-left: 150px solid transparent;
+                border-right: 150px solid transparent;
+                border-top: 100px solid rgba(0, 0, 0, 0.3); /* 阴影颜色 */
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)); /* 阴影渐变 */
+                transform: translateX(-50%);
+                z-index: 1; /* 阴影在盖子下面 */
+                filter: blur(5px); /* 添加模糊效果 */
+                transition: opacity 1s ease; /* 添加过渡效果 */
+              }
+          
+              /* 信封盖子上的❤️ */
+              .heart {
+                position: absolute;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 2.5em; /* 放大爱心 */
+                color: #d9534f;
+                z-index: 3;
+                transition: opacity 1s ease;
+              }
+          
+              /* 打开信封时盖子翻转动画 */
+              .envelope.open .flap {
+                transform: translateX(-50%) rotateX(-150deg);
+              }
+          
+              /* 打开信封时隐藏爱心 */
+              .envelope.open .heart {
+                opacity: 0;
+              }
+              /* 打开信封时隐藏阴影 */
+            .envelope.open .flap-shadow {
+            opacity: 0; /* 隐藏阴影 */
+            transition: opacity 1s ease; /* 添加过渡效果 */
+              }
+          
+          
+              /* 打开信封时信件弹出动画 */
+      .envelope.open + .letter {
+          opacity: 1;
+          transform: translate(-50%, -100%) scale(1); /* 从信封中向上抽出 */
+          transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+      }
+            </style>
+          </head>
+         <body>
+          
+          <div class="envelope-container">
+            <div class="envelope" onclick="toggleEnvelope()">
+              <div class="flap-shadow"></div> <!-- 信封盖子的阴影 -->
+              <div class="flap"></div> <!-- 信封的三角形盖子 -->
+              <div class="heart">❤️</div> <!-- 顶角的❤️ -->
+            </div>
+            <div class="letter" id="letter">
+              <div class="letter-content">
+                亲爱的朋友，<br><br>
+                优秀的生活状态不是​仰​望他人，而是把自己活成一道风景。只要自己变优秀了其他的事情都会跟着好起来的。无论何时何地与其羡慕他人，不如花时间充实自己。清醒时做事，迷茫时读书，独处时思考，烦躁时运动，焦虑时静心，得意时淡然，失意时坦然，忙碌时专注，闲暇时蓄力，熬过无人问津的日子，才能拥有诗和远方。风雨人生路要学会承受，学会看透。人生说到底就是一场与自己的较量。水之所以清澈并非因为它不含杂质，而是因为沉淀。心之所以通透不是因为没有杂念，而是在于明白取舍。人生是一个不断取舍不断超越的过程，学会接纳生命里的每一天。无论好与坏，悲与喜坦然面对世间的千变万化，让自己在岁月的洗礼中，变得更加温柔和强大。​
+                —— 来自你的朋友<br><br>
+                <img src="https://img1.baidu.com/it/u=3092676348,2137858895&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=507" alt="信中的图片">
+              </div>
+            </div>
+          </div>
+          <script>
+            function toggleEnvelope() {
+              const envelope = document.querySelector('.envelope');
+              envelope.classList.toggle('open');
+            }
+          
+            document.addEventListener('click', function (event) {
+              const envelope = document.querySelector('.envelope');
+              const letter = document.querySelector('.letter');
+              
+              // 判断点击位置是否在信封或信件之外
+              if (!envelope.contains(event.target) && !letter.contains(event.target) && envelope.classList.contains('open')) {
+                envelope.classList.remove('open');
+                snowContainer.style.opacity = "0.8"; // 恢复雪花透明度
+                openMusic.pause(); // 暂停打开信封的音乐
+                defaultMusic.play(); // 恢复默认音乐
+              }
+            });
+          </script>
+          <p>一封为你写的信❤️</p>
+      </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
